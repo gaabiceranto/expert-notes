@@ -34,6 +34,14 @@ export function App() {
     localStorage.setItem('notes', JSON.stringify(notesArray))
   }
 
+  const onNoteDelete = (id: string) => {
+    const notesArray = notes.filter(note => {
+      return note.id != id
+    })
+    setNotes(notesArray)
+    localStorage.setItem('notes', JSON.stringify(notesArray))
+  }
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value
 
@@ -43,6 +51,8 @@ export function App() {
   const filtredNotes = search != ''
     ? notes.filter(note => note.content.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
     : notes
+
+
 
   return (
     <div className="px-5  mx-auto max-w-6xl my-12 space-y-6">
@@ -60,7 +70,7 @@ export function App() {
         <NewNoteCard onNoteCreated={onNoteCreated} />
 
         {filtredNotes.map(note => {
-          return <NoteCard key={note.id} note={note} />
+          return <NoteCard key={note.id} note={note} onNoteDelete={onNoteDelete} />
         })}
       </div>
     </div>
