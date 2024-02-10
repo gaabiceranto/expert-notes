@@ -3,7 +3,11 @@ import { X } from 'lucide-react'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 
-export const NewNoteCard = () => {
+interface NewNoteCardProps {
+  onNoteCreated: (content: string) => void //void==vazio (ou seja a funcao não tem retorno)
+}
+
+export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true)
   const [content, setContent] = useState('')
 
@@ -18,8 +22,10 @@ export const NewNoteCard = () => {
 
   const handleSalveNote = (e: FormEvent) => {
     e.preventDefault()
+    onNoteCreated(content)
+    setContent('')
+    setShouldShowOnboarding(true)
     toast.success('Nota criada com sucesso!')
-
   }
 
   return (
@@ -40,25 +46,25 @@ export const NewNoteCard = () => {
             <X className='size-5' />
           </Dialog.Close>
           <form onSubmit={handleSalveNote} className='flex-1 flex flex-col'>
-          <div className="flex flex-1 flex-col gap-3 p-5">
-            <span className="text-sm font-medium text-slate-200">
-              Adicionar nota
-            </span>
-            {shouldShowOnboarding ? (
-              <p className="text-sm leading-6 text-slate-400">
-                Comece <button className="font-md text-lime-400  hover:underline">gravando uma nota</button> em áudio ou se preferir <button onClick={handleStartEditor} className="font-md text-lime-400  hover:underline">utilize apenas texto</button>.
-              </p>
-            ) : (
-              <textarea autoFocus onChange={handleContentChange} className="
+            <div className="flex flex-1 flex-col gap-3 p-5">
+              <span className="text-sm font-medium text-slate-200">
+                Adicionar nota
+              </span>
+              {shouldShowOnboarding ? (
+                <p className="text-sm leading-6 text-slate-400">
+                  Comece <button className="font-md text-lime-400  hover:underline">gravando uma nota</button> em áudio ou se preferir <button onClick={handleStartEditor} className="font-md text-lime-400  hover:underline">utilize apenas texto</button>.
+                </p>
+              ) : (
+                <textarea autoFocus onChange={handleContentChange} value={content} className="
               text-sm eading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none
               "
-              />
-            )}
-          </div>
-          <button
-            type='submit'
-            className='w-full bg-lime-400 py-4 text-ecnter text-sm text-lime-950 outline-none font-medium hover:bg-lime-500'
-          >Salvar nota</button>
+                />
+              )}
+            </div>
+            <button
+              type='submit'
+              className='w-full bg-lime-400 py-4 text-ecnter text-sm text-lime-950 outline-none font-medium hover:bg-lime-500'
+            >Salvar nota</button>
           </form>
         </Dialog.Content>
       </Dialog.Portal>

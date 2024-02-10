@@ -29,7 +29,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
       flex-col
       ">
         <span className="text-sm font-medium text-slate-200">
-          {note.date.toDateString()}
+        {formatDistanceToNow(note.date, { locale: ptBR, addSuffix: true })}
         </span>
         <p className="text-sm leading-6 text-slate-400">
           {note.content}
